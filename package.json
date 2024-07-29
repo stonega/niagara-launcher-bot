@@ -3,7 +3,7 @@
   "type": "module",
   "version": "0.1.0",
   "private": true,
-  "description": "Telegram bot starter template",
+  "description": "Instantly access and launch your favorite apps",
   "imports": {
     "#root/*": "./build/src/*"
   },
@@ -49,6 +49,6 @@
     "prisma": "^5.17.0"
   },
   "lint-staged": {
-    "*.ts": "eslint"
+    "*.ts": "bunx @biomejs/biome check"
   }
 }
