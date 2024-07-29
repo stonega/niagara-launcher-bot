@@ -154,13 +154,13 @@ const config = {
   "inlineDatasources": {
     "db": {
       "url": {
-        "fromEnvVar": "POSTGRES_DATABASE",
+        "fromEnvVar": "POSTGRES_URI",
         "value": null
       }
     }
   },
-  "inlineSchema": "// This is your Prisma schema file,\n// learn more about it in the docs: https://pris.ly/d/prisma-schema\n\n// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?\n// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init\n\ngenerator client {\n  provider      = \"prisma-client-js\"\n  output        = \"../src/generated/client\"\n  binaryTargets = [\"debian-openssl-1.1.x\", \"rhel-openssl-3.0.x\"]\n}\n\ndatasource db {\n  provider = \"postgresql\"\n  url      = env(\"POSTGRES_DATABASE\")\n}\n\nmodel Session {\n  id    Int    @id @default(autoincrement())\n  key   String @unique\n  value String\n}\n",
-  "inlineSchemaHash": "11ccbcfaf376c58e44d9256d8b0a68564690c04d94c1b4d6be4338ed1be940a2",
+  "inlineSchema": "// This is your Prisma schema file,\n// learn more about it in the docs: https://pris.ly/d/prisma-schema\n\n// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?\n// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init\n\ngenerator client {\n  provider      = \"prisma-client-js\"\n  output        = \"../src/generated/client\"\n  binaryTargets = [\"debian-openssl-1.1.x\", \"rhel-openssl-3.0.x\"]\n}\n\ndatasource db {\n  provider = \"postgresql\"\n  url      = env(\"POSTGRES_URI\")\n}\n\nmodel Session {\n  id    Int    @id @default(autoincrement())\n  key   String @unique\n  value String\n}\n",
+  "inlineSchemaHash": "7e432f9b5f03192e7b528193231b38924cdb49ccdb4036a00ebced92cc2f7737",
   "copyEngine": true
 }
 
