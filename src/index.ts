@@ -1,7 +1,7 @@
 #!/usr/bin/env tsx
 
 import process from "node:process";
-import { type RunnerHandle, run } from "@grammyjs/runner";
+import { run } from "@grammyjs/runner";
 import { createBot } from "#root/bot/index.js";
 import type { PollingConfig, WebhookConfig } from "#root/config.js";
 import { config } from "#root/config.js";
@@ -54,14 +54,14 @@ async function startWebhook(config: WebhookConfig) {
 	// graceful shutdown
 	onShutdown(async () => {
 		logger.info("Shutdown");
-		await serverManager.stop();
+		serverManager.stop();
 	});
 
 	// to prevent receiving updates before the bot is ready
 	await bot.init();
 
 	// start server
-	const info = await serverManager.start();
+	const info = serverManager.start();
 	logger.info({
 		msg: "Server started",
 		url: info.url,
