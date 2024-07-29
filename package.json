@@ -11,12 +11,12 @@
   "license": "MIT",
   "scripts": {
     "typecheck": "tsc",
-    "dev": "bun --watch ./src/main.ts",
-    "start": "tsc && bun ./src/main.ts",
+    "dev": "bun --watch ./src/index.ts",
+    "start": "tsc && bun ./src/index.ts",
     "sync": "bun run scripts/sync_apps.ts",
     "fmt": "bunx @biomejs/biome check --write */**",
     "prisma:migrate": "bunx prisma migrate dev",
-    "start:force": "bun ./src/main.ts",
+    "start:force": "bun ./src/index.ts",
     "prepare": "husky || true"
   },
   "dependencies": {
