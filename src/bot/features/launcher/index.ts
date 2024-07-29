@@ -14,22 +14,6 @@ const allApps = Array.from(new Set(allAppsFromJson.map((app) => app.link))).map(
 const composer = new Composer<Context>();
 const launcher = composer.chatType("private");
 
-const settinsMenu = new Menu<Context>("launcher-settings")
-	.text("REMOVE ➖", (ctx) => {
-		ctx.deleteMessage();
-		ctx.reply("Tap the app to remove it. You can re-add it later if needed.", {
-			reply_markup: removeMenu,
-		});
-	})
-	.text("ADD ➕", (ctx) => {
-		ctx.deleteMessage();
-		ctx.reply("Tap an app to add it. For custom apps, use the /add command.", {
-			reply_markup: addMenu,
-		});
-	})
-	.row()
-	.back("Go Back");
-
 const removeMenu = new Menu<Context>("launcher-remove")
 	.dynamic((ctx: Context) => {
 		const range = new MenuRange<Context>();
@@ -37,18 +21,12 @@ const removeMenu = new Menu<Context>("launcher-remove")
 		apps.forEach((app, i) => {
 			range.text(`➖ ${app.title}`, (ctx) => {
 				ctx.session.apps = apps.filter((a) => a.link !== app.link);
-				ctx.editMessageText(
-					`${app.title} is removed successfully 🎉  go /home`,
-				);
 			});
 			if ((i + 1) % 3 === 0) {
 				range.row();
 			}
 		});
-		range.row().text("Confirm", (ctx) => {
-			ctx.deleteMessage();
-			ctx.reply("Update successfully 🎉  go /home");
-		});
+		range.row().back("« Back");
 		return range;
 	})
 	.row();
@@ -63,19 +41,24 @@ const addMenu = new Menu<Context>("launcher-add")
 		apps.forEach((app, i) => {
 			range.text(`➕${app.title}`, (ctx) => {
 				ctx.session.apps = [...userApps, app];
-				ctx.editMessageText(`${app.title} is added successfully 🎉  go /home`);
 			});
 			if ((i + 1) % 3 === 0) {
 				range.row();
 			}
 		});
-		range.row().text("Confirm", (ctx) => {
-			ctx.deleteMessage();
-			ctx.reply("Update successfully 🎉  go /home");
-		});
+		range.row().back("« Back");
 		return range;
 	})
 	.row();
+
+const settinsMenu = new Menu<Context>("launcher-settings")
+	.submenu("REMOVE ➖", "launcher-remove")
+	.submenu("ADD ➕", "launcher-add")
+	.row()
+	.back("« Back to Home");
+
+settinsMenu.register(removeMenu);
+settinsMenu.register(addMenu);
 
 const menu = new Menu<Context>("launcher")
 	.dynamic(async (ctx) => {
@@ -95,8 +78,9 @@ const menu = new Menu<Context>("launcher")
 menu.register(settinsMenu);
 
 async function addApp(conversation: ConversationContext, ctx: Context) {
-	await ctx.reply(`OK. Send me a list of commands for your bot. Please use this format:<br/>MiniApp1 - https://t.me/bot1/join
-<br/>MiniApp2 - https://t.me/bot2/join<br/>.`);
+	await ctx.reply(
+		"OK. Send me a list of apps. Please use this format: \n\n MiniApp1 - https://t.me/bot1/join \n MiniApp2 - https://t.me/bot2/join",
+	);
 	const { message } = await conversation.wait();
 	const text = message?.text;
 	if (!text) {
@@ -129,8 +113,6 @@ launcher.errorBoundary(
 	(err) => console.error("Conversation threw an error!", err),
 	createConversation(addApp),
 );
-launcher.use(removeMenu);
-launcher.use(addMenu);
 launcher.use(menu);
 
 launcher.command("add", async (ctx) => {

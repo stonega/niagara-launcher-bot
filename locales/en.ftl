@@ -6,7 +6,7 @@ setcommands-command-description = Set bot commands
 
 ## Welcome Feature
 
-welcome = Welcome!
+welcome = Welcome to Niagara Launcher, go /home to start!
 
 ## Language Feature
 
