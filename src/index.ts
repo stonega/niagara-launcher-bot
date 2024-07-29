@@ -1,6 +1,3 @@
-#!/usr/bin/env tsx
-
-import process from "node:process";
 import { run } from "@grammyjs/runner";
 import { createBot } from "#root/bot/index.js";
 import type { PollingConfig, WebhookConfig } from "#root/config.js";
@@ -78,12 +75,14 @@ async function startWebhook(config: WebhookConfig) {
 	});
 }
 
-try {
-	if (config.isWebhookMode) await startWebhook(config);
-	else if (config.isPollingMode) await startPolling(config);
-} catch (error) {
-	logger.error(error);
-	process.exit(1);
+async function start() {
+	try {
+		if (config.isWebhookMode) await startWebhook(config);
+		else if (config.isPollingMode) await startPolling(config);
+	} catch (error) {
+		logger.error(error);
+		process.exit(1);
+	}
 }
 
 // Utils
@@ -98,3 +97,5 @@ function onShutdown(cleanUp: () => Promise<void>) {
 	process.on("SIGINT", handleShutdown);
 	process.on("SIGTERM", handleShutdown);
 }
+
+start();
