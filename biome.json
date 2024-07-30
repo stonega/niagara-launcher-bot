@@ -25,8 +25,7 @@
         "noUselessElse": "off"
       },
       "complexity": {
-        "useLiteralKeys": "off",
-        "noBannedTypes": "off"
+        "useLiteralKeys": "off"
       },
       "suspicious": {
         "noExplicitAny": "off"
