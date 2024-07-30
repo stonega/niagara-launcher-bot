@@ -21,12 +21,13 @@ const removeMenu = new Menu<Context>("launcher-remove")
 		apps.forEach((app, i) => {
 			range.text(`➖ ${app.title}`, (ctx) => {
 				ctx.session.apps = apps.filter((a) => a.link !== app.link);
+				ctx.menu?.update();
 			});
 			if ((i + 1) % 3 === 0) {
 				range.row();
 			}
 		});
-		range.row().back("« Back");
+		range.row().back("« Back to Settings");
 		return range;
 	})
 	.row();
@@ -41,12 +42,13 @@ const addMenu = new Menu<Context>("launcher-add")
 		apps.forEach((app, i) => {
 			range.text(`➕${app.title}`, (ctx) => {
 				ctx.session.apps = [...userApps, app];
+				ctx.menu?.update();
 			});
 			if ((i + 1) % 3 === 0) {
 				range.row();
 			}
 		});
-		range.row().back("« Back");
+		range.row().back("« Back to Settings");
 		return range;
 	})
 	.row();

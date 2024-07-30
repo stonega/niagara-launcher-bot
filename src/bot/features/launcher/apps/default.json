@@ -1,15 +1,21 @@
 [
 	{
+		"title": "Telegram App Center",
+		"link": "https://t.me/tapps_bot/center"
+	},
+	{
+		"title": "Wallet",
+		"link": "https://t.me/wallet/start",
+		"description": "Get up to 50% APY on USDT!"
+	},
+	{
+		"title": "Notcoin",
+		"link": "https://t.me/notcoin_bot/click",
+		"description": "Probably nothing."
+	},
+	{
 		"title": "Dogs🦴",
 		"link": "https://t.me/dogshouse_bot/join"
-	},
-	{
-		"title": "CATS",
-		"link": "https://t.me/catsgang_bot/join"
-	},
-	{
-		"title": "OKX Racer",
-		"link": "https://t.me/OKX_official_bot/OKX_Racer"
 	},
 	{
 		"title": "Nomis",
@@ -20,6 +26,14 @@
 		"title": "Blum",
 		"link": "https://t.me/BlumCryptoBot/app",
 		"description": "Blum brings you every coin you need. Just one place, no more switching between multiple platforms."
+	},
+	{
+		"title": "CATS",
+		"link": "https://t.me/catsgang_bot/join"
+	},
+	{
+		"title": "OKX Racer",
+		"link": "https://t.me/OKX_official_bot/OKX_Racer"
 	},
 	{
 		"title": "BOOL BOT",
