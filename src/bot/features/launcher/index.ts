@@ -13,12 +13,24 @@ const allApps = Array.from(new Set(allAppsFromJson.map((app) => app.link))).map(
 );
 const composer = new Composer<Context>();
 const launcher = composer.chatType("private");
+const pageSize = 12;
 
 const removeMenu = new Menu<Context>("launcher-remove")
 	.dynamic((ctx: Context) => {
 		const range = new MenuRange<Context>();
 		const apps = ctx.session.apps;
-		apps.forEach((app, i) => {
+		let i = ctx.session.removePage ?? 1;
+		const total = Math.ceil(apps.length / pageSize);
+		console.log(apps.length, total);
+		if (i > total) {
+			ctx.session.removePage = 1;
+			i = 1;
+		}
+		const paginatedApps = apps.slice(
+			(i - 1) * pageSize,
+			(i - 1) * pageSize + pageSize,
+		);
+		paginatedApps.forEach((app, i) => {
 			range.text(`➖ ${app.title}`, (ctx) => {
 				ctx.session.apps = apps.filter((a) => a.link !== app.link);
 				ctx.menu?.update();
@@ -27,7 +39,25 @@ const removeMenu = new Menu<Context>("launcher-remove")
 				range.row();
 			}
 		});
-		range.row().back("« Back to Settings");
+		range
+			.row()
+			.text("« Previous", (ctx) => {
+				if (i > 1) {
+					ctx.session.removePage = i - 1;
+					ctx.menu.update();
+				}
+			})
+			.text((ctx) => {
+				return `${i}/${total}`;
+			})
+			.text("Next »", (ctx) => {
+				if (i < total) {
+					ctx.session.removePage = i + 1;
+					ctx.menu.update();
+				}
+			})
+			.row()
+			.back("« Back to Settings");
 		return range;
 	})
 	.row();
@@ -39,16 +69,45 @@ const addMenu = new Menu<Context>("launcher-add")
 		const apps: MiniApp[] = allApps.filter(
 			(app) => !userApps.find((a) => a.link === app.link),
 		);
-		apps.forEach((app, i) => {
+		let i = ctx.session.addPage ?? 1;
+		const total = Math.ceil(apps.length / pageSize);
+		console.log(apps.length, total);
+		if (i > total) {
+			ctx.session.addPage = 1;
+			i = 1;
+		}
+		const paginatedApps = apps.slice(
+			(i - 1) * pageSize,
+			(i - 1) * pageSize + pageSize,
+		);
+		paginatedApps.forEach((app, i) => {
 			range.text(`➕${app.title}`, (ctx) => {
 				ctx.session.apps = [...userApps, app];
-				ctx.menu?.update();
+				ctx.menu.update();
 			});
 			if ((i + 1) % 3 === 0) {
 				range.row();
 			}
 		});
-		range.row().back("« Back to Settings");
+		range
+			.row()
+			.text("« Previous", (ctx) => {
+				if (i > 1) {
+					ctx.session.addPage = i - 1;
+					ctx.menu.update();
+				}
+			})
+			.text((ctx) => {
+				return `${i}/${total}`;
+			})
+			.text("Next »", (ctx) => {
+				if (i < total) {
+					ctx.session.addPage = i + 1;
+					ctx.menu.update();
+				}
+			})
+			.row()
+			.back("« Back to Settings");
 		return range;
 	})
 	.row();
@@ -66,12 +125,40 @@ const menu = new Menu<Context>("launcher")
 	.dynamic(async (ctx) => {
 		const range = new MenuRange<Context>();
 		const apps = ctx.session.apps;
-		apps.forEach((app, i) => {
+		let i = ctx.session.homePage ?? 1;
+		const total = Math.ceil(apps.length / pageSize);
+		console.log(apps.length, total);
+		if (i > total) {
+			ctx.session.homePage = 1;
+			i = 1;
+		}
+		const paginatedApps = apps.slice(
+			(i - 1) * pageSize,
+			(i - 1) * pageSize + pageSize,
+		);
+		paginatedApps.forEach((app, i) => {
 			range.url(`${app.title}`, app.link);
 			if ((i + 1) % 3 === 0) {
 				range.row();
 			}
 		});
+		range
+			.row()
+			.text("« Previous", (ctx) => {
+				if (i > 1) {
+					ctx.session.homePage = i - 1;
+					ctx.menu.update();
+				}
+			})
+			.text((ctx) => {
+				return `${i}/${total}`;
+			})
+			.text("Next »", (ctx) => {
+				if (i < total) {
+					ctx.session.homePage = i + 1;
+					ctx.menu.update();
+				}
+			});
 		return range;
 	})
 	.row()
@@ -122,10 +209,9 @@ launcher.command("add", async (ctx) => {
 });
 
 launcher.command("home", (ctx) => {
-	ctx.reply(
-		"Niagata Launcher: Instantly access and launch your favorite apps",
-		{ reply_markup: menu },
-	);
+	ctx.reply(`👋 ${ctx.chat.first_name}, have a good day!`, {
+		reply_markup: menu,
+	});
 });
 
 export { composer as launcherFeature };

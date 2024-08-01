@@ -15,6 +15,9 @@ export type MiniApp = {
 };
 export type SessionData = {
 	apps: MiniApp[];
+	homePage: number;
+	addPage: number;
+	removePage: number;
 };
 type Options = Pick<
 	SessionOptions<SessionData, Context>,
@@ -29,6 +32,9 @@ export function session(options: Options): Middleware<Context> {
 		storage: new PrismaAdapter(prisma.session),
 		initial: () => ({
 			apps: defaultApps,
+			homePage: 1,
+			addPage: 1,
+			removePage: 1,
 			conversation: {},
 		}),
 	});
